@@ -184,6 +184,10 @@ else
   exit 1
 }
 
+$changeLogEntries = Get-ChangeLogEntries -ChangeLogLocation $packageProperties.ChangeLogPath
+Remove-EmptySections -ChangeLogEntries $changeLogEntries -Version $newVersion
+Set-ChangeLogContent -ChangeLogLocation $packageProperties.ChangeLogPath -ChangeLogEntries $changeLogEntries
+
 $changelogIsValid = Confirm-ChangeLogEntry -ChangeLogLocation $packageProperties.ChangeLogPath -VersionString $newVersion -ForRelease $true
 
 if (!$changelogIsValid)

@@ -293,9 +293,15 @@ function Set-ChangeLogContent {
 
 function Remove-EmptySections {
   param (
-    [Parameter(Mandatory = $true)]
+    $ChangeLogEntries,
+    $Version,
     $ChangeLogEntry
   )
+
+  if ($changeLogEntries -and $Version)
+  {
+    $ChangeLogEntry = $changeLogEntries[$Version]
+  }
 
   $releaseContent = $ChangeLogEntry.ReleaseContent
   $sectionsToRemove = @()
@@ -327,5 +333,9 @@ function Remove-EmptySections {
     }
     $ChangeLogEntry.ReleaseContent = $sanitizedReleaseContent.ToArray()
   }
-  return $changeLogEntry
+
+  if (-not $changeLogEntries -or (-not $Version))
+  {
+    return $changeLogEntry
+  }
 }
